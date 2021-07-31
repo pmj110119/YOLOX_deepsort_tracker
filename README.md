@@ -19,15 +19,19 @@ yolox+deepsort实现目标跟踪
 
 ## Select a YOLOX family model
 
-1. train your own model or just download the model from https://github.com/Megvii-BaseDetection/YOLOX
+1. train your own model or just download pretrained models from https://github.com/Megvii-BaseDetection/YOLOX
 
 2. update the type and path of model in **detector.py**
 
+   for example:
+
    ```python
    class Detector(BaseDetector):
-   	""" """
+   	""" 
+   	YOLO family: yolox-s, yolox-m, yolox-l, yolox-x, yolox-tiny, yolox-nano, yolov3
+   	"""
        def init_model(self):
-           self.yolox_name = 'yolox-m'
+           self.yolox_name = 'yolox-m' 
            self.weights = 'weights/yolox_m.pth'
            
        """ """
@@ -35,11 +39,15 @@ yolox+deepsort实现目标跟踪
 
 ## Run demo
 
+Track the video:
+
 ```python
 python demo.py
 ```
 
+Detect the image:
 
+*coming soon...*
 
 ## Filter tracked classes
 
@@ -49,3 +57,4 @@ coming soon...
 
 ## Train your own model
 
+coming soon...

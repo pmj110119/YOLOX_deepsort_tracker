@@ -105,12 +105,20 @@ class Detector(BaseDetector):
             outputs = self.model(img)
             outputs = postprocess(
                 outputs, self.exp.num_classes, self.exp.test_conf, self.exp.nmsthre  # TODO:用户可更改
-            )
+            )[0]
+
+        # bboxes = outputs[:, 0:4]
+        # bboxes /= ratio
+        # cls = outputs[:, 6]
+        # scores = outputs[:, 4] * outputs[:, 5]
+        
+        # vis_res = vis(img, bboxes, scores, cls, cls_conf, self.cls_names)
+
         pred_boxes = []
-        for output in outputs[0]:
+        for output in outputs:
             bbox = output[0:4]
 
-            # preprocessing: resize
+
             bbox /= ratio
             class_idx = output[6]
             score = output[4] * output[5]
@@ -121,23 +129,13 @@ class Detector(BaseDetector):
     
             pred_boxes.append(
                 (x1, y1, x2, y2, label, score))
-        return img, pred_boxes
+        return img, pred_boxes#, {'bboxes':pred_boxes, 'scores':score, 'cls':class_idx}
 
 
-    def visual(self, output, img_info, cls_conf=0.35):
-        ratio = img_info["ratio"]
-        img = img_info["raw_img"]
-        if output is None:
-            return img
-        output = output.cpu()
+    def visual(self, bboxes, img, scores, cls_conf=0.35):
 
-        bboxes = output[:, 0:4]
 
-        # preprocessing: resize
-        bboxes /= ratio
 
-        cls = output[:, 6]
-        scores = output[:, 4] * output[:, 5]
 
         vis_res = vis(img, bboxes, scores, cls, cls_conf, self.cls_names)
         return vis_res
