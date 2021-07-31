@@ -1,4 +1,4 @@
-from AIDetector_pytorch import Detector
+from detector import Detector
 import imutils
 import cv2
 
@@ -15,7 +15,7 @@ def main():
     print('fps:', fps)
     t = int(1000/fps)
 
-    size = None
+
     videoWriter = None
 
     while True:
@@ -39,11 +39,8 @@ def main():
         cv2.waitKey(t)
 
         if cv2.getWindowProperty(name, cv2.WND_PROP_AUTOSIZE) < 1:
-            # 点x退出
             break
-        # except Exception as e:
-        #     print(e)
-        #     break
+
 
     cap.release()
     videoWriter.release()

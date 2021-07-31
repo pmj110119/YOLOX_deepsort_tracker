@@ -4,7 +4,7 @@ yolox+deepsort实现目标跟踪
 
 最新的yolox尝尝鲜~~（yolox正处在频繁更新阶段，因此直接链接yolox仓库作为子模块）
 
-## install
+## Install
 
 1. Clone the repository recursively:
 
@@ -16,8 +16,36 @@ yolox+deepsort实现目标跟踪
 
    `pip install -r requirements.txt`
 
-3. 下载权重文件（TODO）
+
+## Select a YOLOX family model
+
+1. train your own model or just download the model from https://github.com/Megvii-BaseDetection/YOLOX
+
+2. update the type and path of model in **detector.py**
+
+   ```python
+   class Detector(BaseDetector):
+   	""" """
+       def init_model(self):
+           self.yolox_name = 'yolox-m'
+           self.weights = 'weights/yolox_m.pth'
+           
+       """ """
+   ```
+
+## Run demo
+
+```python
+python demo.py
+```
 
 
 
-## Coming soon......
+## Filter tracked classes
+
+coming soon...
+
+
+
+## Train your own model
+
