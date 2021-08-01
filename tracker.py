@@ -32,8 +32,8 @@ def plot_bboxes(image, bboxes, line_thickness=None):
 
 
 class Tracker():
-    def __init__(self):
-        self.detector = Detector()
+    def __init__(self, model='yolox-s', ckpt='yolox_s.pth'):
+        self.detector = Detector(model, ckpt)
 
         #palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
         cfg = get_config()

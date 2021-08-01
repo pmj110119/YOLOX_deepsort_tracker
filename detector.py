@@ -9,8 +9,6 @@ from YOLOX.yolox.data.datasets import COCO_CLASSES
 from YOLOX.yolox.exp import get_exp_by_name
 from YOLOX.yolox.utils import fuse_model, get_model_info, postprocess, vis
 
-#from tracker import update_tracker
-
 
 
 COCO_MEAN = (0.485, 0.456, 0.406)
@@ -19,89 +17,22 @@ COCO_STD = (0.229, 0.224, 0.225)
 
 
 
-class BaseDetector(object):
-    def __init__(self):
-
-        self.img_size = 640
-        self.threshold = 0.3
-        self.stride = 1
-
-    def build_config(self):
-
-        self.faceTracker = {}
-        self.faceClasses = {}
-        self.faceLocation1 = {}
-        self.faceLocation2 = {}
-        self.frameCounter = 0
-        self.currentCarID = 0
-        self.recorded = []
-
-        self.font = cv2.FONT_HERSHEY_SIMPLEX
-
-    def feedCap(self, img):
-
-        retDict = {
-            'frame': None,
-            'faces': None,
-            'list_of_ids': None,
-            'face_bboxes': []
-        }
-        # self.frameCounter += 1
-
-        # img, faces, face_bboxes = update_tracker(self, img)
-
-        # retDict['frame'] = img
-        # retDict['faces'] = faces
-        # retDict['face_bboxes'] = face_bboxes
-
-        return retDict
-
-    def init_model(self):
-        raise EOFError("Undefined model type.")
-
-    def preprocess(self):
-        raise EOFError("Undefined model type.")
-
-    def detect(self):
-        raise EOFError("Undefined model type.")
-
-
-
-
-class detect_info():
-    def __call__(self):
-        res = {
-            'raw_img':None,
-            'img':None,
-            'boxes':None,
-            'scores':None,
-            'class_ids':None,
-            'visual':None
-        }
-        return res
-
-
-class Detector(BaseDetector):
+class Detector():
     """ 图片检测器 """
-    def __init__(self):
+    def __init__(self, model='yolox-s', ckpt='yolox_s.pth'):
         super(Detector, self).__init__()
-        self.init_model()
-        self.build_config()
 
-    def init_model(self):
-        self.yolox_name = 'yolox-m'
-        self.weights = 'weights/yolox_m.pth'
-        
+
 
         self.device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
 
-        self.exp = get_exp_by_name(self.yolox_name)
+        self.exp = get_exp_by_name(model)
         self.test_size = self.exp.test_size  # TODO: 改成图片自适应大小
         self.model = self.exp.get_model()
         self.model.to(self.device)
         self.model.eval()
-        ckpt = torch.load(self.weights, map_location="cpu")
-        self.model.load_state_dict(ckpt["model"])
+        checkpoint = torch.load(ckpt, map_location="cpu")
+        self.model.load_state_dict(checkpoint["model"])
 
 
 

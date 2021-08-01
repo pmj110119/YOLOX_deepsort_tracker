@@ -7,7 +7,7 @@ import imutils, argparse, cv2
 def detect_img(file):
     img = cv2.imread(file)
     print(file)
-    detector = Detector()
+    detector = Detector(model='yolox-m', ckpt='weights/yolox_m.pth')
     info = detector.detect(img)
     result = info['visual']
 
@@ -22,7 +22,7 @@ def detect_img(file):
 
 def track_cap(file):
     cap = cv2.VideoCapture(file)
-    tracker = Tracker()
+    tracker = Tracker(model='yolox-m', ckpt='weights/yolox_m.pth')
 
     videoWriter = None
     while True:
