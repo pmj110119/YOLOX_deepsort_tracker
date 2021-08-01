@@ -10,15 +10,14 @@ yolox+deepsort实现目标跟踪
 
 ```python
 from detector import Detector
-# Instantiate Detector and select model and ckpt
-detector = Detector(model='yolox-s', ckpt='yolo_s.pth')
-# load image
-img = cv2.imread('dog.jpg')
-# inference
-result = detector.detect(img)
-# imshow
-img_visual = result['visual']	
-cv2.imshow('detect', img_visual)
+
+detector = Detector(model='yolox-s', ckpt='yolo_s.pth') # instantiate Detector
+
+img = cv2.imread('dog.jpg') 	# load image
+result = detector.detect(img) 	# detect targets
+
+img_visual = result['visual'] 	 # visualized image
+cv2.imshow('detect', img_visual) # imshow
 ```
 
 Detector uses yolo-x family models to detect targets. 
@@ -29,17 +28,18 @@ You can also get more information like *raw_img/boudingbox/score/class_id* from 
 
 ```python
 from tracker import Tracker
-# Instantiate Detector and select model and ckpt
-tracker = Tracker(model='yolox-s', ckpt='yolo_s.pth')
-# load video
-cap = cv2.VideoCapture('test.mp4')
-# start tracking...
+
+tracker = Tracker(model='yolox-s', ckpt='yolo_s.pth') # instantiate Tracker
+
+cap = cv2.VideoCapture('test.mp4')	# load video
+
 while True:
-    _, frame = cap.read()
+    _, frame = cap.read()	# get new frame
     if frame is None:
        break
-    result = tracker.update(frame)
-    cv2.imshow('demo', result['visual'])
+    result = tracker.update(frame)	# detect and track targets
+    
+    cv2.imshow('demo', result['visual'])	# imshow visualized frame
     cv2.waitKey(1)
 ```
 
