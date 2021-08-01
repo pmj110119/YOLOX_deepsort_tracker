@@ -1,12 +1,14 @@
 from tracker import Tracker
 from detector import Detector
-import imutils
-import cv2
+import imutils, argparse, cv2
 
 
-def detect_img(raw_img):
+
+def detect_img(file):
+    img = cv2.imread(file)
+    print(file)
     detector = Detector()
-    info = detector.detect(raw_img)
+    info = detector.detect(img)
     result = info['visual']
 
     cv2.imwrite('result.png', result)
@@ -18,7 +20,8 @@ def detect_img(raw_img):
 
 
 
-def track_cap(cap):
+def track_cap(file):
+    cap = cv2.VideoCapture(file)
     tracker = Tracker()
 
     videoWriter = None
@@ -45,9 +48,15 @@ def track_cap(cap):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    # file = 'dog.jpg'
-    # img = cv2.imread(file)
-    # detect_img(img)
-    # exit()
-    cap = cv2.VideoCapture('./test.mp4')
-    track_cap(cap)
+    parser = argparse.ArgumentParser("YOLOX-Tracker Demo!")
+    parser.add_argument("--mode", type=str, default='detect', choices=['detect', 'track'])
+    parser.add_argument('-f', "--file", type=str, help="choose an image or video file")
+    args = parser.parse_args()
+
+    if not args.file:
+        print('>>>> Please select a file!')
+        exit()
+    if args.mode=='detect':
+        detect_img(args.file)
+    elif args.mode=='track':
+        track_cap(args.file)

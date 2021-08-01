@@ -4,6 +4,47 @@ yolox+deepsort实现目标跟踪
 
 最新的yolox尝尝鲜~~（yolox正处在频繁更新阶段，因此直接链接yolox仓库作为子模块）
 
+## How to use Detector and Tracker
+
+- Detect image
+
+  ```python
+  from detector import Detector
+  # Instantiate Detector and select model and ckpt
+  detector = Detector(model='yolox-s', ckpt='yolo_s.pth')
+  # load image
+  img = cv2.imread('dog.jpg')
+  # inference
+  result = detector.detect(img)
+  # imshow
+  img_visual = result['visual']	
+  cv2.imshow('detect', img_visual)
+  ```
+
+  Detector uses yolox model to detect targets. 
+
+  You can also get more information like *raw_img/boudingbox/score/class_id* from the result of detector.
+
+- Track video (or camera)
+
+  ```python
+  from tracker import Tracker
+  # Instantiate Detector and select model and ckpt
+  tracker = Tracker(model='yolox-s', ckpt='yolo_s.pth')
+  # load video
+  cap = cv2.VideoCapture('test.mp4')
+  # start tracking...
+  while True:
+      _, frame = cap.read()
+      if frame is None:
+         break
+      result = tracker.update(frame)
+      cv2.imshow('demo', result['visual'])
+      cv2.waitKey(1)
+  ```
+
+  Tracker uses detector to get each frame's boundingbox, and use deepsort to get every bbox's ID. 
+
 ## Install
 
 1. Clone the repository recursively:
@@ -39,15 +80,17 @@ yolox+deepsort实现目标跟踪
 
 ## Run demo
 
-Track the video:
+- Detect on image
 
-```python
-python demo.py
-```
+  ```python
+  python .\demo.py --mode=detect --file=dog.jpg
+  ```
 
-Detect the image:
+- Track on video
 
-*coming soon...*
+  ```python
+  python .\demo.py --mode=track --file=test.mp4
+  ```
 
 ## Filter tracked classes
 
