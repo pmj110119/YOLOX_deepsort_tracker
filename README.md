@@ -4,48 +4,48 @@ yolox+deepsort实现目标跟踪
 
 最新的yolox尝尝鲜~~（yolox正处在频繁更新阶段，因此直接链接yolox仓库作为子模块）
 
-## How to use Detector and Tracker
+## :tada: How to use Detector and Tracker
 
-- Detect image
+### &#8627; Detect example
 
-  ```python
-  from detector import Detector
-  # Instantiate Detector and select model and ckpt
-  detector = Detector(model='yolox-s', ckpt='yolo_s.pth')
-  # load image
-  img = cv2.imread('dog.jpg')
-  # inference
-  result = detector.detect(img)
-  # imshow
-  img_visual = result['visual']	
-  cv2.imshow('detect', img_visual)
-  ```
+```python
+from detector import Detector
+# Instantiate Detector and select model and ckpt
+detector = Detector(model='yolox-s', ckpt='yolo_s.pth')
+# load image
+img = cv2.imread('dog.jpg')
+# inference
+result = detector.detect(img)
+# imshow
+img_visual = result['visual']	
+cv2.imshow('detect', img_visual)
+```
 
-  Detector uses yolox model to detect targets. 
+Detector uses yolo-x family models to detect targets. 
 
-  You can also get more information like *raw_img/boudingbox/score/class_id* from the result of detector.
+You can also get more information like *raw_img/boudingbox/score/class_id* from the result of detector.
 
-- Track video (or camera)
+### &#8627; Track example
 
-  ```python
-  from tracker import Tracker
-  # Instantiate Detector and select model and ckpt
-  tracker = Tracker(model='yolox-s', ckpt='yolo_s.pth')
-  # load video
-  cap = cv2.VideoCapture('test.mp4')
-  # start tracking...
-  while True:
-      _, frame = cap.read()
-      if frame is None:
-         break
-      result = tracker.update(frame)
-      cv2.imshow('demo', result['visual'])
-      cv2.waitKey(1)
-  ```
+```python
+from tracker import Tracker
+# Instantiate Detector and select model and ckpt
+tracker = Tracker(model='yolox-s', ckpt='yolo_s.pth')
+# load video
+cap = cv2.VideoCapture('test.mp4')
+# start tracking...
+while True:
+    _, frame = cap.read()
+    if frame is None:
+       break
+    result = tracker.update(frame)
+    cv2.imshow('demo', result['visual'])
+    cv2.waitKey(1)
+```
 
-  Tracker uses detector to get each frame's boundingbox, and use deepsort to get every bbox's ID. 
+Tracker uses detector to get each frame's boundingbox, and use deepsort to get every bbox's ID. 
 
-## Install
+## :art: Install
 
 1. Clone the repository recursively:
 
@@ -58,27 +58,25 @@ yolox+deepsort实现目标跟踪
    `pip install -r requirements.txt`
 
 
-## Select a YOLOX family model
+## :zap: Select a YOLOX family model
 
 1. train your own model or just download pretrained models from https://github.com/Megvii-BaseDetection/YOLOX
 
-2. update the type and path of model in **detector.py**
+2. select the model and checkpoint when using Detector and Tracker
 
    for example:
 
    ```python
-   class Detector(BaseDetector):
-   	""" 
-   	YOLO family: yolox-s, yolox-m, yolox-l, yolox-x, yolox-tiny, yolox-nano, yolov3
-   	"""
-       def init_model(self):
-           self.yolox_name = 'yolox-m' 
-           self.weights = 'weights/yolox_m.pth'
-           
-       """ """
+   """
+   YOLO family: yolox-s, yolox-m, yolox-l, yolox-x, yolox-tiny, yolox-nano, yolov3
+   """
+   # yolox-s example
+   detector = Detector(model='yolox-s', ckpt='./yolo_s.pth')
+   # yolox-m example
+   detector = Detector(model='yolox-m', ckpt='./yolo_m.pth')
    ```
 
-## Run demo
+## :clap: Run demo
 
 - Detect on image
 
