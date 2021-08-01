@@ -9,7 +9,7 @@ from YOLOX.yolox.data.datasets import COCO_CLASSES
 from YOLOX.yolox.exp import get_exp_by_name
 from YOLOX.yolox.utils import fuse_model, get_model_info, postprocess, vis
 
-from tracker import update_tracker
+#from tracker import update_tracker
 
 
 
@@ -38,7 +38,7 @@ class BaseDetector(object):
 
         self.font = cv2.FONT_HERSHEY_SIMPLEX
 
-    def feedCap(self, im, func_status):
+    def feedCap(self, img):
 
         retDict = {
             'frame': None,
@@ -46,13 +46,13 @@ class BaseDetector(object):
             'list_of_ids': None,
             'face_bboxes': []
         }
-        self.frameCounter += 1
+        # self.frameCounter += 1
 
-        im, faces, face_bboxes = update_tracker(self, im)
+        # img, faces, face_bboxes = update_tracker(self, img)
 
-        retDict['frame'] = im
-        retDict['faces'] = faces
-        retDict['face_bboxes'] = face_bboxes
+        # retDict['frame'] = img
+        # retDict['faces'] = faces
+        # retDict['face_bboxes'] = face_bboxes
 
         return retDict
 
@@ -68,7 +68,17 @@ class BaseDetector(object):
 
 
 
-
+class detect_info():
+    def __call__(self):
+        res = {
+            'raw_img':None,
+            'img':None,
+            'boxes':None,
+            'scores':None,
+            'class_ids':None,
+            'visual':None
+        }
+        return res
 
 
 class Detector(BaseDetector):
@@ -95,9 +105,12 @@ class Detector(BaseDetector):
 
 
 
-    def detect(self, img):
+    def detect(self, raw_img, visual=True, conf=0.5):
+        info = {}
+        img, ratio = preproc(raw_img, self.test_size, COCO_MEAN, COCO_STD)
+        info['raw_img'] = raw_img
+        info['img'] = img
 
-        img, ratio = preproc(img, self.test_size, COCO_MEAN, COCO_STD)
         img = torch.from_numpy(img).unsqueeze(0)
         img = img.to(self.device)
 
@@ -105,40 +118,19 @@ class Detector(BaseDetector):
             outputs = self.model(img)
             outputs = postprocess(
                 outputs, self.exp.num_classes, self.exp.test_conf, self.exp.nmsthre  # TODO:用户可更改
-            )[0]
+            )[0].cpu().numpy()
 
-        # bboxes = outputs[:, 0:4]
-        # bboxes /= ratio
-        # cls = outputs[:, 6]
-        # scores = outputs[:, 4] * outputs[:, 5]
-        
-        # vis_res = vis(img, bboxes, scores, cls, cls_conf, self.cls_names)
-
-        pred_boxes = []
-        for output in outputs:
-            bbox = output[0:4]
-
-
-            bbox /= ratio
-            class_idx = output[6]
-            score = output[4] * output[5]
-            if score<0.3:       # TODO:用户可更改
-                continue
-            x1, y1, x2, y2 = int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])
-            label = COCO_CLASSES[int(class_idx)]
-    
-            pred_boxes.append(
-                (x1, y1, x2, y2, label, score))
-        return img, pred_boxes#, {'bboxes':pred_boxes, 'scores':score, 'cls':class_idx}
-
-
-    def visual(self, bboxes, img, scores, cls_conf=0.35):
+        info['boxes'] = outputs[:, 0:4]/ratio
+        info['scores'] = outputs[:, 4] * outputs[:, 5]
+        info['class_ids'] = outputs[:, 6]
+        info['box_nums'] = outputs.shape[0]
+        # 可视化绘图
+        if visual:
+            info['visual'] = vis(info['raw_img'], info['boxes'], info['scores'], info['class_ids'], conf, COCO_CLASSES)
+        return info
 
 
 
-
-        vis_res = vis(img, bboxes, scores, cls, cls_conf, self.cls_names)
-        return vis_res
 
 
 
