@@ -1,8 +1,7 @@
 # YOLOX_deepsort_tracker
 
-yolox+deepsort实现目标跟踪
+Using YOLOX as detector, and deepsort as tracker.
 
-最新的yolox尝尝鲜~~（yolox正处在频繁更新阶段，因此直接链接yolox仓库作为子模块）
 
 ## :tada: How to use Detector and Tracker
 
@@ -71,9 +70,9 @@ Tracker uses detector to get each frame's boundingbox, and use deepsort to get e
    YOLO family: yolox-s, yolox-m, yolox-l, yolox-x, yolox-tiny, yolox-nano, yolov3
    """
    # yolox-s example
-   detector = Detector(model='yolox-s', ckpt='./yolo_s.pth')
+   detector = Detector(model='yolox-s', ckpt='./yolox_s.pth')
    # yolox-m example
-   detector = Detector(model='yolox-m', ckpt='./yolo_m.pth')
+   detector = Detector(model='yolox-m', ckpt='./yolox_m.pth')
    ```
 
 ## :clap: Run demo
