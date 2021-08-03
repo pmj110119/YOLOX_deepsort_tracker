@@ -7,19 +7,19 @@ from glob import glob
 
 
 def track_images(img_dir):
-    tracker = Tracker(model='yolox-m', ckpt='weights/yolox_m.pth',filter_class=['truck','person','car'])
+    tracker = Tracker(model='yolox-s', ckpt='weights/yolox_s.pth.tar',filter_class=['truck','person','car'])
     imgs = glob(os.path.join(img_dir,'*.png')) + glob(os.path.join(img_dir,'*.jpg')) + glob(os.path.join(img_dir,'*.jpeg'))
     for path in imgs:
         im = cv2.imread(path)
         im = imutils.resize(im, height=400)
         image,_ = tracker.update(im)
         image = imutils.resize(image, height=500)
-        cv2.imwrite(os.path.join('data/output_img2',os.path.basename(path)), image)
-    #     cv2.imshow('demo', image)
-    #     cv2.waitKey(1)
-    #     if cv2.getWindowProperty('demo', cv2.WND_PROP_AUTOSIZE) < 1:
-    #         break
-    # cv2.destroyAllWindows()
+
+        cv2.imshow('demo', image)
+        cv2.waitKey(1)
+        if cv2.getWindowProperty('demo', cv2.WND_PROP_AUTOSIZE) < 1:
+            break
+    cv2.destroyAllWindows()
 
 
 

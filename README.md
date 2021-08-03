@@ -13,19 +13,17 @@
 
 ## :tada: How to use
 
-### &#8627; Easy use
+### &#8627; Tracker example
 
 ```python
 from tracker import Tracker
 
 tracker = Tracker()
 
-result = tracker.update(img)	# feed one frame and get bbox with track-id
+img_visual, bbox = tracker.update(img) # feed one frame and get result
 ```
 
-Detector uses yolo-x family models to detect targets. 
-
-You can also get more information like *boudingbox/score/class_id/track_id* from the result of track.
+Tracker uses YOLOX as detector to get each target's boundingbox, and use deepsort to get every bbox's ID.
 
 ### &#8627; Select specific category
 
@@ -37,17 +35,34 @@ For example:
 tracker = Tracker(filter_classes=['car','person']) 
 ```
 
-## &#8627; Run demo
+## &#8627; Detector example
+
+If you don't need tracking and just want to use YOLOX for object-detection, you can use the class **Detector** to inference easliy .
+
+For example:
 
 ```python
-python demo.py --path=test.mp4
+from detector import Detector
+
+detector = Detector(model='yolox-s', ckpt='yolo_s.pth') # instantiate Detector
+
+img = cv2.imread('dog.jpg') 	# load image
+result = detector.detect(img) 	# detect targets
+
+img_visual = result['visual'] 	 # visualized image
+cv2.imshow('detect', img_visual) # imshow
+
 ```
+
+You can also get more information like *raw_img/boudingbox/score/class_id* from the result of detector.
 
 ## :art: Install
 
 1. Clone the repository recursively:
 
-   `git clone --recurse-submodules https://github.com/pmj110119/YOLOX_deepsort_tracker.git`
+   ```bash
+   git clone --recurse-submodules https://github.com/pmj110119/YOLOX_deepsort_tracker.git
+   ```
 
    If you already cloned and forgot to use `--recurse-submodules` you can run `git submodule update --init`(clone最新的YOLOX仓库)
 
@@ -68,9 +83,9 @@ python demo.py --path=test.mp4
    | [YOLOX-x](./exps/default/yolox_x.py)        | 640  |         **51.2**         |        17.3        |     99.1      |    281.9     | [onedrive](https://megvii-my.sharepoint.cn/:u:/g/personal/gezheng_megvii_com/EdgVPHBziOVBtGAXHfeHI5kBza0q9yyueMGdT0wXZfI1rQ?e=tABO5u)/[github](https://github.com/Megvii-BaseDetection/storage/releases/download/0.0.1/yolox_x.pth) |
    | [YOLOX-Darknet53](./exps/default/yolov3.py) | 640  |           47.4           |        11.1        |     63.7      |    185.3     | [onedrive](https://megvii-my.sharepoint.cn/:u:/g/personal/gezheng_megvii_com/EZ-MV1r_fMFPkPrNjvbJEMoBLOLAnXH-XKEB77w8LhXL6Q?e=mf6wOc)/[github](https://github.com/Megvii-BaseDetection/storage/releases/download/0.0.1/yolox_darknet53.pth) |
 
-   You can download yolox_s.pth to the folder **weights** , which is the default model path of **Tracker**.
+   Download **yolox_s.pth** to the folder **weights** , which is the default model path of **Tracker**.
 
-2. You can also use other yolox models, for example:
+2. You can also use other yolox models as detector,. For example:
 
    ```python
    """
@@ -81,4 +96,10 @@ python demo.py --path=test.mp4
    # yolox-m example
    detector = Tracker(model='yolox-m', ckpt='./yolox_m.pth')
    ```
+
+##  :rose: Run demo
+
+```python
+python demo.py --path=test.mp4
+```
 
