@@ -43,15 +43,15 @@ For example:
 
 ```python
 from detector import Detector
+import cv2
+detector = Detector() # instantiate Detector
 
-detector = Detector(model='yolox-s', ckpt='yolo_s.pth') # instantiate Detector
-
-img = cv2.imread('dog.jpg') 	# load image
+img = cv2.imread('YOLOX/assets/dog.jpg') 	# load image
 result = detector.detect(img) 	# detect targets
 
 img_visual = result['visual'] 	 # visualized image
 cv2.imshow('detect', img_visual) # imshow
-
+cv2.waitKey(0)
 ```
 
 You can also get more information like *raw_img/boudingbox/score/class_id* from the result of detector.
