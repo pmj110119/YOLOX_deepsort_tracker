@@ -1,25 +1,37 @@
 # YOLOX_deepsort_tracker
 
-Using YOLOX as detector, and deepsort as tracker.
-
+<div align="center">
+<p>
+<img src="utils/img2.gif" width="400"/> <img src="utils/img1.gif" width="400"/> 
+</p>
+<br>
+<div>
 
 ## :tada: How to use
 
 ### &#8627; Easily use tracker in your project!
 
-1. import 
-
 ```python
 from tracker import Tracker
 
-tracker = Tracker() 
+tracker = Tracker()  # track specific category
 
 result = tracker.update(img)
 ```
 
 Detector uses yolo-x family models to detect targets. 
 
-You can also get more information like *raw_img/boudingbox/score/class_id* from the result of detector.
+You can also get more information like *boudingbox/score/class_id/track_id* from the result of track.
+
+### &#8627; Track specific category
+
+You can set some categories for tracking.
+
+```python
+tracker = Tracker(filter_classes=['car','person']) 
+```
+
+
 
 ### &#8627; Video example
 
@@ -68,30 +80,16 @@ Tracker uses detector to get each frame's boundingbox, and use deepsort to get e
    YOLO family: yolox-s, yolox-m, yolox-l, yolox-x, yolox-tiny, yolox-nano, yolov3
    """
    # yolox-s example
-   detector = Detector(model='yolox-s', ckpt='./yolox_s.pth')
+   detector = Tracker(model='yolox-s', ckpt='./yolox_s.pth')
    # yolox-m example
-   detector = Detector(model='yolox-m', ckpt='./yolox_m.pth')
+   detector = Tracker(model='yolox-m', ckpt='./yolox_m.pth')
    ```
 
 ## :clap: Run demo
 
-- Detect on image
-
-  ```python
-  python .\demo.py --mode=detect --file=dog.jpg
-  ```
-
-- Track on video
-
-  ```python
-  python .\demo.py --mode=track --file=test.mp4
-  ```
-
-## Filter tracked classes
-
-coming soon...
-
-
+```python
+python .\demo.py --path=test.mp4
+```
 
 ## Train your own model
 

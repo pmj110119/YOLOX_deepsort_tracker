@@ -14,7 +14,7 @@ def track_images(img_dir):
         im = imutils.resize(im, height=400)
         image,_ = tracker.update(im)
         image = imutils.resize(image, height=500)
-        cv2.imwrite(os.path.join('data/output_img1',os.path.basename(path)), image)
+        cv2.imwrite(os.path.join('data/output_img2',os.path.basename(path)), image)
     #     cv2.imshow('demo', image)
     #     cv2.waitKey(1)
     #     if cv2.getWindowProperty('demo', cv2.WND_PROP_AUTOSIZE) < 1:

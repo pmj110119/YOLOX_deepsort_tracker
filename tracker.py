@@ -12,7 +12,7 @@ from utils.visualize import vis_track
 class_names = COCO_CLASSES
 
 class Tracker():
-    def __init__(self, model='yolox-s', ckpt='yolox_s.pth.tar', filter_class=None):
+    def __init__(self, filter_class=None, model='yolox-s', ckpt='yolox_s.pth.tar', ):
         self.detector = Detector(model, ckpt)
         cfg = get_config()
         cfg.merge_from_file("deep_sort/configs/deep_sort.yaml")
