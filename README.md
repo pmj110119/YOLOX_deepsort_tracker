@@ -3,27 +3,25 @@
 Using YOLOX as detector, and deepsort as tracker.
 
 
-## :tada: How to use Detector and Tracker
+## :tada: How to use
 
-### &#8627; Detect example
+### &#8627; Easily use tracker in your project!
+
+1. import 
 
 ```python
-from detector import Detector
+from tracker import Tracker
 
-detector = Detector(model='yolox-s', ckpt='yolo_s.pth') # instantiate Detector
+tracker = Tracker() 
 
-img = cv2.imread('dog.jpg') 	# load image
-result = detector.detect(img) 	# detect targets
-
-img_visual = result['visual'] 	 # visualized image
-cv2.imshow('detect', img_visual) # imshow
+result = tracker.update(img)
 ```
 
 Detector uses yolo-x family models to detect targets. 
 
 You can also get more information like *raw_img/boudingbox/score/class_id* from the result of detector.
 
-### &#8627; Track example
+### &#8627; Video example
 
 ```python
 from tracker import Tracker

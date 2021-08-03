@@ -3,3 +3,9 @@ __pycache__
 *.jpg
 *.png
 weights
+*tar
+test.py
+data
+result.json
+test2.py
+zzz.py
