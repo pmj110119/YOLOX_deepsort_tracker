@@ -18,9 +18,24 @@
 ```python
 from tracker import Tracker
 
-tracker = Tracker()
+tracker = Tracker()    # instantiate Tracker
 
-img_visual, bbox = tracker.update(img) # feed one frame and get result
+cap = cv2.VideoCapture('test.mp4')  # open one video
+
+while True:
+    _, im = cap.read() # read frame from video
+    if im is None:
+       break
+    
+    img_visual, bbox = tracker.update(img)  # feed one frame and get result
+    
+    cv2.imshow('demo', image)	# imshow
+    cv2.waitKey(1)
+    if cv2.getWindowProperty('demo', cv2.WND_PROP_AUTOSIZE) < 1:
+        break
+
+cap.release()
+cv2.destroyAllWindows()
 ```
 
 Tracker uses YOLOX as detector to get each target's boundingbox, and use deepsort to get every bbox's ID.
