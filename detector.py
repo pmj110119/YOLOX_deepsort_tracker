@@ -6,7 +6,7 @@ import cv2
 
 from YOLOX.yolox.data.data_augment import preproc
 from YOLOX.yolox.data.datasets import COCO_CLASSES
-from YOLOX.yolox.exp import get_exp_by_name
+from YOLOX.yolox.exp.build import get_exp_by_name
 from YOLOX.yolox.utils import postprocess
 from utils.visualize import vis
 
