@@ -29,7 +29,7 @@ while True:
     
     img_visual, bbox = tracker.update(img)  # feed one frame and get result
     
-    cv2.imshow('demo', image)	# imshow
+    cv2.imshow('demo', img_visual)	# imshow
     cv2.waitKey(1)
     if cv2.getWindowProperty('demo', cv2.WND_PROP_AUTOSIZE) < 1:
         break
