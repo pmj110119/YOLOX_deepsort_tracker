@@ -13,7 +13,7 @@ def track_images(img_dir):
         im = cv2.imread(path)
         im = imutils.resize(im, height=400)
         image,_ = tracker.update(im)
-        image = imutils.resize(image, height=500)
+        #image = imutils.resize(image, height=500)
 
         cv2.imshow('demo', image)
         cv2.waitKey(1)
@@ -26,10 +26,15 @@ def track_images(img_dir):
 def track_cap(file):
     cap = cv2.VideoCapture(file)
     tracker = Tracker()
+    a = 0
     while True:
+        
         _, im = cap.read()
         if im is None:
             break
+        a += 1
+        if a%10!=0:
+            continue
         im = imutils.resize(im, height=500)
         image,_ = tracker.update(im)
        
@@ -45,10 +50,11 @@ def track_cap(file):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("YOLOX-Tracker Demo!")
-    parser.add_argument('-p', "--path", type=str, help="choose a video")
+    parser.add_argument('-p', "--path", type=str, default='test.mp4', help="choose a video")
     args = parser.parse_args()
 
     if os.path.isfile(args.path):
         track_cap(args.path)
     else:
         track_images(args.path)
+        

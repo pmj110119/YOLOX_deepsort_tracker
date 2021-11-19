@@ -6,7 +6,7 @@ import cv2
 
 from YOLOX.yolox.data.data_augment import preproc
 from YOLOX.yolox.data.datasets import COCO_CLASSES
-from YOLOX.yolox.exp.build import get_exp_by_name
+from YOLOX.yolox.exp.build import get_exp_by_name,get_exp_by_file
 from YOLOX.yolox.utils import postprocess
 from utils.visualize import vis
 
@@ -26,7 +26,7 @@ class Detector():
 
 
         self.device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
-
+        self.device = torch.device('cpu')
         self.exp = get_exp_by_name(model)
         self.test_size = self.exp.test_size  # TODO: 改成图片自适应大小
         self.model = self.exp.get_model()
@@ -51,11 +51,14 @@ class Detector():
             outputs = postprocess(
                 outputs, self.exp.num_classes, self.exp.test_conf, self.exp.nmsthre  # TODO:用户可更改
             )[0].cpu().numpy()
-
-        info['boxes'] = outputs[:, 0:4]/ratio
-        info['scores'] = outputs[:, 4] * outputs[:, 5]
-        info['class_ids'] = outputs[:, 6]
-        info['box_nums'] = outputs.shape[0]
+        
+        if outputs[0] is None:
+            info['boxes'], info['scores'], info['class_ids'],info['box_nums']=None,None,None,0
+        else:
+            info['boxes'] = outputs[:, 0:4]/ratio
+            info['scores'] = outputs[:, 4] * outputs[:, 5]
+            info['class_ids'] = outputs[:, 6]
+            info['box_nums'] = outputs.shape[0]
         # 可视化绘图
         if visual:
             info['visual'] = vis(info['raw_img'], info['boxes'], info['scores'], info['class_ids'], conf, COCO_CLASSES)
