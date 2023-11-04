@@ -23,8 +23,8 @@ tracker = Tracker()    # instantiate Tracker
 cap = cv2.VideoCapture('test.mp4')  # open one video
 
 while True:
-    _, im = cap.read() # read frame from video
-    if im is None:
+    _, img = cap.read() # read frame from video
+    if img is None:
        break
     
     img_visual, bbox = tracker.update(img)  # feed one frame and get result
