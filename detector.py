@@ -58,7 +58,13 @@ class Detector():
             info['boxes'] = outputs[:, 0:4]/ratio
             info['scores'] = outputs[:, 4] * outputs[:, 5]
             info['class_ids'] = outputs[:, 6]
-            info['box_nums'] = outputs.shape[0]
+
+            mask = info['scores']>=conf
+            info['boxes'] =  info['boxes'][mask]
+            info['scores'] =  info['scores'][mask]
+            info['class_ids'] =  info['class_ids'][mask]
+            info['box_nums'] = mask.sum()
+            
         # 可视化绘图
         if visual:
             info['visual'] = vis(info['raw_img'], info['boxes'], info['scores'], info['class_ids'], conf, COCO_CLASSES)
