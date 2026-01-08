@@ -6,7 +6,7 @@ import cv2
 
 from YOLOX.yolox.data.data_augment import preproc
 from YOLOX.yolox.data.datasets import COCO_CLASSES
-from YOLOX.yolox.exp.build import get_exp_by_name,get_exp_by_file
+from YOLOX.yolox.exp import get_exp
 from YOLOX.yolox.utils import postprocess
 from utils.visualize import vis
 
@@ -20,14 +20,10 @@ COCO_STD = (0.229, 0.224, 0.225)
 
 class Detector():
     """ 图片检测器 """
-    def __init__(self, model='yolox-s', ckpt='yolox_s.pth.tar'):
+    def __init__(self, model, ckpt):
         super(Detector, self).__init__()
-
-
-
         self.device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
-        self.device = torch.device('cpu')
-        self.exp = get_exp_by_name(model)
+        self.exp = get_exp(model)
         self.test_size = self.exp.test_size  # TODO: 改成图片自适应大小
         self.model = self.exp.get_model()
         self.model.to(self.device)
